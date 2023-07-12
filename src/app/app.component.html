@@ -6,3 +6,22 @@
        style="display:none"
        accept="image/*">
 <button (click)="fileUpload.click()">Datei hochladen</button>
+
+<br />
+
+<table *ngIf="files.length > 0">
+  <thead>
+  <tr>
+    <th>File Name</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let file of files">
+    <td>{{ file.name }}</td>
+    <td>
+      <a (click)="downloadFile(file)">Download</a>
+    </td>
+  </tr>
+  </tbody>
+</table>

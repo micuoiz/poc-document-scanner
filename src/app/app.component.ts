@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'poc-screenshot';
+  files: File[] = [];
+
 
   importFile(event) {
     if (event.target.files.length === 0) {
@@ -14,7 +16,21 @@ export class AppComponent {
       return;
     }
     let file: File = event.target.files[0];
-    console.log(file);
-    // after here 'file' can be accessed and used for further process
+    this.files.push(file);
+  }
+
+  downloadFile(file: File) {
+    const blob = new Blob([file], { type: file.type });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name;
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 }
