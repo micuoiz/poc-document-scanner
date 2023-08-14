@@ -1,0 +1,49 @@
+<stzh-heading level="1" curve="hero" with-border>
+  POC - Document Scanner
+</stzh-heading>
+
+<input #fileUpload
+       type="file"
+       capture="user"
+       style="display:none"
+       accept="image/*"
+       (click)="fileUpload.value"
+       (change)="importFile($event)"
+>
+<br />
+
+<stzh-button icon="camera" (click)="openCamera()">
+  Datei hochladen
+</stzh-button>
+
+<stzh-vspace curve="large"></stzh-vspace>
+
+<stzh-table *ngIf="files.length > 0">
+  <stzh-heading slot="heading" level="2">Bereits hochgeladene Dokumente</stzh-heading>
+  <table>
+    <thead>
+    <tr>
+      <th>
+        <span>Dateiname</span>
+      </th>
+      <th>
+        <span></span>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let file of files">
+      <td>{{ file.name }}</td>
+      <td>
+        <stzh-link (click)="downloadFile(file)" icon="external-link">
+          Download
+        </stzh-link>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</stzh-table>
+
+<video #video id="video"></video>
+<canvas #canvas id="canvas"></canvas>  <!-- original video -->
+<canvas #result id="result"></canvas>  <!-- highlighted video -->
