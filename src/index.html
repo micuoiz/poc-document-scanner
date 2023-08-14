@@ -1,13 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>PocScreenshot</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="utf-8" />
+  <meta name="version" content="0.0.0" />
+
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- async loading of font stylesheet -->
+  <link rel="preload" as="style" href="stzh-components-assets/assets/fonts.css" />
+  <link rel="stylesheet" href="stzh-components-assets/assets/fonts.css" media="print" onload="this.media='all'" />
+
+  <!-- stylesheet with CSS properties/variables -->
+  <link rel="stylesheet" href="stzh-components-assets/stzh-components.css" />
+
+  <script>
+    // set path to translations files
+    window.stzhComponents = window.stzhComponents || {};
+    window.stzhComponents.pathTranslations = "stzh-components-assets/assets/i18n";
+
+    // polyfills conditionally loaded (for IE 11)
+    window.MSInputMethodContext && document.documentMode && document.write('<script src="stzh-components-assets/assets/polyfills/ie11CustomProperties.min.js"><\x2fscript>');
+    !window.IntersectionObserver && document.write('<script src="stzh-components-assets/assets/polyfills/intersection-observer.min.js"><\/script>');
+  </script>
+
 </head>
-<body>
-  <app-root></app-root>
+<body style="padding: 0; margin: 0">
+  <stzh-container>
+    <stzh-flyingfocus></stzh-flyingfocus>
+    <stzh-icon-sprite></stzh-icon-sprite>
+
+
+    <stzh-header>
+      <img
+        slot="logo"
+        src="media/logo/stzh-default.svg"
+        alt="Logo City Zürich, go to homepage"
+      />
+    </stzh-header>
+    <stzh-vspace></stzh-vspace>
+    <app-root></app-root>
+  </stzh-container>
 </body>
 </html>
