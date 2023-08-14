@@ -1,4 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { applyPolyfills, defineCustomElements } from "@oiz/stzh-components/loader";
+
+// load the polyfills if you need to support older browsers
+applyPolyfills().then(() => {
+  defineCustomElements();
+});
+
+declare var jscanify: any;
 
 @Component({
   selector: 'app-root',
@@ -6,11 +14,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'poc-screenshot';
+  title = 'poc-document-scanner';
   files: File[] = [];
 
+  @ViewChild('canvas')
+  private canvas: ElementRef = {} as ElementRef;
 
-  importFile(event) {
+  @ViewChild('result')
+  private result: ElementRef = {} as ElementRef;
+
+  @ViewChild('video')
+  private video: ElementRef = {} as ElementRef;
+
+  importFile(event: any) {
     if (event.target.files.length === 0) {
       console.log('No file selected!');
       return;
@@ -32,5 +48,22 @@ export class AppComponent {
 
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
+  }
+
+  openCamera(): void {
+    const scanner = new jscanify();
+    const canvasCtx = this.canvas.nativeElement.getContext('2d');
+    const resultCtx = this.result.nativeElement.getContext("2d");
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+      this.video.nativeElement.srcObject = stream;
+      this.video.nativeElement.onloadedmetadata = () => {
+        this.video.nativeElement.play();
+        setInterval(() => {
+          canvasCtx.drawImage(this.video.nativeElement, 0, 0);
+          const resultCanvas = scanner.highlightPaper(this.canvas.nativeElement);
+          resultCtx.drawImage(resultCanvas, 0, 0);
+        }, 10);
+      };
+    });
   }
 }
