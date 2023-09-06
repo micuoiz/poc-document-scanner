@@ -54,7 +54,7 @@ export class AppComponent {
     const scanner = new jscanify();
     const canvasCtx = this.canvas.nativeElement.getContext('2d');
     const resultCtx = this.result.nativeElement.getContext("2d");
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environemnt' } }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then((stream) => {
       this.video.nativeElement.srcObject = stream;
       this.video.nativeElement.onloadedmetadata = () => {
         this.video.nativeElement.play();
