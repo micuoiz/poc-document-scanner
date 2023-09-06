@@ -59,9 +59,13 @@ export class AppComponent {
       this.video.nativeElement.onloadedmetadata = () => {
         this.video.nativeElement.play();
         setInterval(() => {
-          canvasCtx.drawImage(this.video.nativeElement, 0, 0);
+          this.canvas.nativeElement.width = this.video.nativeElement.videoWidth;
+          this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
+          canvasCtx.drawImage(this.video.nativeElement, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
           const resultCanvas = scanner.highlightPaper(this.canvas.nativeElement);
-          resultCtx.drawImage(resultCanvas, 0, 0);
+          this.result.nativeElement.width = this.canvas.nativeElement.width;
+          this.result.nativeElement.height = this.canvas.nativeElement.height;
+          resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
         }, 10);
       };
     });
