@@ -12,7 +12,7 @@
 >
 <br />
 
-<stzh-button icon="camera" (click)="openCamera()">
+<stzh-button icon="camera" (click)="extract()">
   Datei hochladen
 </stzh-button>
 
@@ -45,5 +45,5 @@
 </stzh-table>
 
 <video style="display: none" #video id="video"></video>
-<canvas style="display: none" #canvas id="canvas"></canvas>  <!-- original video -->
+<canvas #canvas id="canvas"></canvas>  <!-- original video -->
 <canvas #result id="result"></canvas>  <!-- highlighted video -->

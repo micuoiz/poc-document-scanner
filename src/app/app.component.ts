@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { applyPolyfills, defineCustomElements } from "@oiz/stzh-components/loader";
 
 // load the polyfills if you need to support older browsers
@@ -13,9 +13,10 @@ declare var jscanify: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'poc-document-scanner';
   files: File[] = [];
+  scanner: any = new jscanify();
 
   @ViewChild('canvas')
   private canvas: ElementRef = {} as ElementRef;
@@ -25,6 +26,10 @@ export class AppComponent {
 
   @ViewChild('video')
   private video: ElementRef = {} as ElementRef;
+
+  ngAfterViewInit() {
+    this.openCamera();
+  }
 
   importFile(event: any) {
     if (event.target.files.length === 0) {
@@ -50,8 +55,15 @@ export class AppComponent {
     window.URL.revokeObjectURL(url);
   }
 
+  extract(): void {
+    const resultCanvas = this.scanner.extractPaper(this.canvas.nativeElement, 500, 1000);
+    const resultCtx = this.result.nativeElement.getContext("2d");
+    this.result.nativeElement.width = this.canvas.nativeElement.width;
+    this.result.nativeElement.height = this.canvas.nativeElement.height;
+    resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
+  }
+
   openCamera(): void {
-    const scanner = new jscanify();
     const canvasCtx = this.canvas.nativeElement.getContext('2d');
     const resultCtx = this.result.nativeElement.getContext("2d");
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then((stream) => {
@@ -61,11 +73,8 @@ export class AppComponent {
         setInterval(() => {
           this.canvas.nativeElement.width = this.video.nativeElement.videoWidth;
           this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
+          // const resultCanvas = this.scanner.highlightPaper(this.canvas.nativeElement);
           canvasCtx.drawImage(this.video.nativeElement, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-          const resultCanvas = scanner.highlightPaper(this.canvas.nativeElement);
-          this.result.nativeElement.width = this.canvas.nativeElement.width;
-          this.result.nativeElement.height = this.canvas.nativeElement.height;
-          resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
         }, 10);
       };
     });
