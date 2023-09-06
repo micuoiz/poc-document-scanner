@@ -58,9 +58,7 @@ export class AppComponent implements AfterViewInit {
   extract(): void {
     const resultCanvas = this.scanner.extractPaper(this.canvas.nativeElement, 500, 1000);
     const resultCtx = this.result.nativeElement.getContext("2d");
-    this.result.nativeElement.width = this.canvas.nativeElement.width;
-    this.result.nativeElement.height = this.canvas.nativeElement.height;
-    resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
+    resultCtx.drawImage(resultCanvas, 0, 0);
   }
 
   openCamera(): void {
