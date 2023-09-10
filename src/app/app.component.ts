@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { applyPolyfills, defineCustomElements } from "@oiz/stzh-components/loader";
 
 // load the polyfills if you need to support older browsers
@@ -7,6 +7,7 @@ applyPolyfills().then(() => {
 });
 
 declare var jscanify: any;
+declare var cv: any;
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,9 @@ export class AppComponent implements AfterViewInit {
 
   @ViewChild('result')
   private result: ElementRef = {} as ElementRef;
+
+  @ViewChild('extracted')
+  private extracted: ElementRef = {} as ElementRef;
 
   @ViewChild('video')
   private video: ElementRef = {} as ElementRef;
@@ -56,9 +60,13 @@ export class AppComponent implements AfterViewInit {
   }
 
   extract(): void {
-    const resultCanvas = this.scanner.extractPaper(this.canvas.nativeElement, 500, 1000);
-    const resultCtx = this.result.nativeElement.getContext("2d");
-    resultCtx.drawImage(resultCanvas, 0, 0);
+    const image = cv.imread(this.result.nativeElement);
+    const paperContour = this.scanner.findPaperContour(image);
+    const resultCanvas = this.scanner.extractPaper(this.canvas.nativeElement, 500, 1000, this.scanner.getCornerPoints(paperContour));
+    const extractedCtx = this.extracted.nativeElement.getContext("2d");
+    this.extracted.nativeElement.width = resultCanvas.width;
+    this.extracted.nativeElement.height = resultCanvas.height;
+    extractedCtx.drawImage(resultCanvas, 0, 0);
   }
 
   openCamera(): void {
@@ -71,8 +79,11 @@ export class AppComponent implements AfterViewInit {
         setInterval(() => {
           this.canvas.nativeElement.width = this.video.nativeElement.videoWidth;
           this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
-          // const resultCanvas = this.scanner.highlightPaper(this.canvas.nativeElement);
-          canvasCtx.drawImage(this.video.nativeElement, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+          canvasCtx.drawImage(this.video.nativeElement, 0, 0);
+          const resultCanvas = this.scanner.highlightPaper(this.canvas.nativeElement);
+          this.result.nativeElement.width = this.canvas.nativeElement.width;
+          this.result.nativeElement.height = this.canvas.nativeElement.height;
+          resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
         }, 10);
       };
     });
