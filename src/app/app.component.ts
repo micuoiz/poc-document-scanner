@@ -70,17 +70,37 @@ export class AppComponent implements AfterViewInit {
     extractedCtx.drawImage(resultCanvas, 0, 0);
   }
 
-  async openCamera() {
+async openCamera() {
     this.isCameraOpened = true;
     const canvasCtx = this.canvas.nativeElement.getContext('2d');
     const resultCtx = this.result.nativeElement.getContext("2d");
     let userMedia = await navigator.mediaDevices.enumerateDevices();
-    userMedia.forEach(mediaDevice => {
-      if (mediaDevice.kind === 'videoinput') {
-        console.log(mediaDevice);
-      }
-    });
-
-    console.log(userMedia);
+    const videoDevices = userMedia.filter(mediaDevice => mediaDevice.kind === 'videoinput');
+    const constrains = {
+      video: {
+        deviceId: {
+          exact: videoDevices[videoDevices.length - 1].deviceId
+        }
+      }};
+    
+    navigator.mediaDevices.getUserMedia(constrains)
+    .then((stream) => {
+        this.video.nativeElement.srcObject = stream;
+        this.video.nativeElement.onloadedmetadata = () => {
+          this.video.nativeElement.play();
+          setInterval(() => {
+            this.canvas.nativeElement.width = this.video.nativeElement.videoWidth;
+            this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
+            canvasCtx.drawImage(this.video.nativeElement, 0, 0);
+            const resultCanvas = this.scanner.highlightPaper(this.canvas.nativeElement, {
+              color: 'blue',
+              thickness: 3
+            });
+            this.result.nativeElement.width = this.canvas.nativeElement.width;
+            this.result.nativeElement.height = this.canvas.nativeElement.height;
+            resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
+            }, 10);
+        };
+      });
   }
 }
