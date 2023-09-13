@@ -10,10 +10,11 @@
        (click)="fileUpload.value"
        (change)="importFile($event)"
 >
+
 <br />
 
-<stzh-button icon="camera" (click)="extract()">
-  Datei hochladen
+<stzh-button icon="camera" (click)="openCamera()">
+  Öffne Kamera
 </stzh-button>
 
 <stzh-vspace curve="large"></stzh-vspace>
@@ -47,4 +48,10 @@
 <video style="display: none" #video id="video"></video>
 <canvas style="display: none" #canvas id="canvas"></canvas>  <!-- original video -->
 <canvas #result id="result"></canvas>  <!-- highlighted video -->
+<ng-container *ngIf="isCameraOpened">
+  <stzh-button icon="camera" (click)="extract()">
+    Datei hochladen
+  </stzh-button>
+</ng-container>
+<br />
 <canvas #extracted id="extracted"></canvas> <!-- extracted photo -->
