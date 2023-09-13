@@ -87,8 +87,8 @@ export class AppComponent implements AfterViewInit {
       this.video.nativeElement.onloadedmetadata = () => {
         this.video.nativeElement.play();
         setInterval(() => {
-          this.canvas.nativeElement.width = stream.getVideoTracks()[0].getSettings().width;
-          this.canvas.nativeElement.height = stream.getVideoTracks()[0].getSettings().height;
+          this.canvas.nativeElement.width = this.video.nativeElement.videoWidth;
+          this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
           canvasCtx.drawImage(this.video.nativeElement, 0, 0);
           const resultCanvas = this.scanner.highlightPaper(this.canvas.nativeElement, {
             color: 'blue',
@@ -102,17 +102,19 @@ export class AppComponent implements AfterViewInit {
     });
 
     this.isCameraOpened = true;
+
   }
 
   getConstraints(userMedia: MediaDeviceInfo[]) {
     const videoDevices = userMedia.filter(mediaDevice => mediaDevice.kind === 'videoinput');
     this.allDevices = videoDevices;
+
     return {
       audio: false,
       video: {
         width: { ideal: 1920 },
         height: { ideal: 1080 },
-        frameRate: { ideal: 30 },
+        frameRate: { exact: 30 },
         deviceId: {
           exact: videoDevices[videoDevices.length - 1].deviceId
         }
