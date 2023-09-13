@@ -112,6 +112,7 @@ export class AppComponent implements AfterViewInit {
       video: {
         width: { ideal: 1920 },
         height: { ideal: 1080 },
+        frameRate: { ideal: 30 },
         deviceId: {
           exact: videoDevices[videoDevices.length - 1].deviceId
         }
