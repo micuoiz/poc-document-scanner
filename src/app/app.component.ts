@@ -76,7 +76,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   async openCamera() {
-const canvasCtx = this.canvas.nativeElement.getContext('2d');
+    const canvasCtx = this.canvas.nativeElement.getContext('2d');
     const resultCtx = this.result.nativeElement.getContext("2d");
     const devices = await navigator.mediaDevices.enumerateDevices();
     const constraints = this.getConstraints(devices);
@@ -108,6 +108,7 @@ const canvasCtx = this.canvas.nativeElement.getContext('2d');
     const videoDevices = userMedia.filter(mediaDevice => mediaDevice.kind === 'videoinput');
     this.allDevices = videoDevices;
     return {
+      audio: false,
       video: {
         width: { ideal: 1920 },
         height: { ideal: 1080 },
