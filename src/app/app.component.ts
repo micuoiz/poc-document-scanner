@@ -36,7 +36,7 @@ export class AppComponent implements AfterViewInit {
 
   isCameraOpened: boolean = false;
 
-  allDevices: MediaDeviceInfo[];
+  allDevices: MediaDeviceInfo[] = [];
 
   ngAfterViewInit() {
   }
