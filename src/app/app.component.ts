@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { applyPolyfills, defineCustomElements } from "@oiz/stzh-components/loader";
+import {
+  applyPolyfills,
+  defineCustomElements,
+} from "@oiz/stzh-components/loader";
 
 // load the polyfills if you need to support older browsers
 applyPolyfills().then(() => {
@@ -33,6 +36,8 @@ export class AppComponent implements AfterViewInit {
 
   isCameraOpened: boolean = false;
 
+  allDevices: MediaDeviceInfo[];
+
   ngAfterViewInit() {
   }
 
@@ -46,7 +51,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   downloadFile(file: File) {
-    const blob = new Blob([file], { type: file.type });
+    const blob = new Blob([file], {type: file.type});
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');
@@ -71,16 +76,13 @@ export class AppComponent implements AfterViewInit {
   }
 
   async openCamera() {
-    this.isCameraOpened = true;
-    const canvasCtx = this.canvas.nativeElement.getContext('2d');
+const canvasCtx = this.canvas.nativeElement.getContext('2d');
     const resultCtx = this.result.nativeElement.getContext("2d");
     const devices = await navigator.mediaDevices.enumerateDevices();
     const constraints = this.getConstraints(devices);
 
     navigator.mediaDevices.getUserMedia(constraints)
     .then((stream) => {
-      console.log(stream.getVideoTracks()[0].getSettings().width);
-      console.log(stream.getVideoTracks()[0].getSettings().height);
       this.video.nativeElement.srcObject = stream;
       this.video.nativeElement.onloadedmetadata = () => {
         this.video.nativeElement.play();
@@ -94,16 +96,21 @@ export class AppComponent implements AfterViewInit {
           });
           this.result.nativeElement.width = this.canvas.nativeElement.width;
           this.result.nativeElement.height = this.canvas.nativeElement.height;
-          resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
+          resultCtx.drawImage(resultCanvas, 0, 0);
         }, 10);
       };
     });
+
+    this.isCameraOpened = true;
   }
 
   getConstraints(userMedia: MediaDeviceInfo[]) {
     const videoDevices = userMedia.filter(mediaDevice => mediaDevice.kind === 'videoinput');
+    this.allDevices = videoDevices;
     return {
       video: {
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
         deviceId: {
           exact: videoDevices[videoDevices.length - 1].deviceId
         }
