@@ -31,8 +31,9 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('video')
   private video: ElementRef = {} as ElementRef;
 
+  isCameraOpened: boolean = false;
+
   ngAfterViewInit() {
-    this.openCamera();
   }
 
   importFile(event: any) {
@@ -62,7 +63,7 @@ export class AppComponent implements AfterViewInit {
   extract(): void {
     const image = cv.imread(this.result.nativeElement);
     const paperContour = this.scanner.findPaperContour(image);
-    const resultCanvas = this.scanner.extractPaper(this.canvas.nativeElement, 500, 1000, this.scanner.getCornerPoints(paperContour));
+    const resultCanvas = this.scanner.extractPaper(this.canvas.nativeElement, 1240, 1754, this.scanner.getCornerPoints(paperContour));
     const extractedCtx = this.extracted.nativeElement.getContext("2d");
     this.extracted.nativeElement.width = resultCanvas.width;
     this.extracted.nativeElement.height = resultCanvas.height;
@@ -70,22 +71,31 @@ export class AppComponent implements AfterViewInit {
   }
 
   openCamera(): void {
+    this.isCameraOpened = true;
     const canvasCtx = this.canvas.nativeElement.getContext('2d');
     const resultCtx = this.result.nativeElement.getContext("2d");
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then((stream) => {
-      this.video.nativeElement.srcObject = stream;
-      this.video.nativeElement.onloadedmetadata = () => {
-        this.video.nativeElement.play();
-        setInterval(() => {
-          this.canvas.nativeElement.width = this.video.nativeElement.videoWidth;
-          this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
-          canvasCtx.drawImage(this.video.nativeElement, 0, 0);
-          const resultCanvas = this.scanner.highlightPaper(this.canvas.nativeElement);
-          this.result.nativeElement.width = this.canvas.nativeElement.width;
-          this.result.nativeElement.height = this.canvas.nativeElement.height;
-          resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
-        }, 10);
-      };
-    });
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: 'environment',
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
+      }}).then((stream) => {
+        this.video.nativeElement.srcObject = stream;
+        this.video.nativeElement.onloadedmetadata = () => {
+          this.video.nativeElement.play();
+          setInterval(() => {
+            this.canvas.nativeElement.width = this.video.nativeElement.videoWidth;
+            this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
+            canvasCtx.drawImage(this.video.nativeElement, 0, 0);
+            const resultCanvas = this.scanner.highlightPaper(this.canvas.nativeElement, {
+              color: 'blue',
+              thickness: 3
+            });
+            this.result.nativeElement.width = this.canvas.nativeElement.width;
+            this.result.nativeElement.height = this.canvas.nativeElement.height;
+            resultCtx.drawImage(resultCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
+            }, 10);
+        };
+      });
   }
 }
