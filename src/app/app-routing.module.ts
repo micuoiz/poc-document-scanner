@@ -1,8 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CanvasComponent } from "./components/canvas/canvas.component";
+import { NativeComponent } from "./components/native/native.component";
 
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: "canvas", component: CanvasComponent },
+  { path: "native", component: NativeComponent },
+  { path: "**", redirectTo: 'canvas', pathMatch: "full" }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

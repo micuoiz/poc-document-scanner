@@ -1,64 +1,25 @@
-<stzh-heading level="1" curve="hero" with-border>
-  POC - Document Scanner
-</stzh-heading>
+<stzh-icon-sprite></stzh-icon-sprite>
+<stzh-flyingfocus></stzh-flyingfocus>
 
-<input #fileUpload
-       type="file"
-       capture="user"
-       style="display:none"
-       accept="image/*"
-       (click)="fileUpload.value"
-       (change)="importFile($event)"
->
+<stzh-container>
+  <stzh-header>
+    <img
+      slot="logo"
+      src="media/logo/stzh-default.svg"
+      alt="Logo City Zürich, go to homepage"
+    />
+  </stzh-header>
+  <stzh-cell span-medium="8">
+    <stzh-pagetitle>
+      <stzh-heading slot="heading" with-border>
+        POC - Document Scanner
+      </stzh-heading>
+    </stzh-pagetitle>
+    <a [routerLink]="'canvas'">Canvas</a>
+    <stzh-vspace></stzh-vspace>
+    <a [routerLink]="'native'">Native</a>
+    <stzh-vspace></stzh-vspace>
+    <router-outlet></router-outlet>
+  </stzh-cell>
+</stzh-container>
 
-<br />
-
-<stzh-vspace></stzh-vspace>
-
-<stzh-button icon="camera" (click)="openCamera()">
-  Öffne Kamera
-</stzh-button>
-
-<stzh-vspace curve="large"></stzh-vspace>
-
-<stzh-table *ngIf="files.length > 0">
-  <stzh-heading slot="heading" level="2">Bereits hochgeladene Dokumente</stzh-heading>
-  <table>
-    <thead>
-    <tr>
-      <th>
-        <span>Dateiname</span>
-      </th>
-      <th>
-        <span></span>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let file of files">
-      <td>{{ file.name }}</td>
-      <td>
-        <stzh-link (click)="downloadFile(file)" icon="external-link">
-          Download
-        </stzh-link>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</stzh-table>
-
-<video style="display: none" #video id="video"></video>
-<canvas style="display: none" #canvas id="canvas"></canvas>  <!-- original video -->
-<canvas #result id="result"></canvas>  <!-- highlighted video -->
-<ng-container *ngIf="isCameraOpened">
-  <stzh-button icon="camera" (click)="extract()">
-    Datei hochladen
-  </stzh-button>
-  <ng-container *ngFor="let device of allDevices; index as x">
-    <h1>Kamera: {{ x }}</h1>
-    <p>{{ device.label }}</p>
-    <p>{{ device.deviceId }}</p>
-  </ng-container>
-</ng-container>
-<br />
-<canvas #extracted id="extracted"></canvas> <!-- extracted photo -->
