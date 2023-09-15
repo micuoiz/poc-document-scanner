@@ -21,7 +21,7 @@ export class FrameAdjustComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize camera feed
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: {facingMode: 'environment'}}).then((stream) => {
       const videoElement = this.cameraVideo.nativeElement;
       videoElement.srcObject = stream;
       videoElement.onloadedmetadata = () => {
