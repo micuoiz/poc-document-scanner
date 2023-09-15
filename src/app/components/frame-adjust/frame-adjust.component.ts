@@ -15,13 +15,16 @@ export class FrameAdjustComponent implements OnInit {
   videoWidth: number = 0;
   videoHeight: number = 0;
 
+  allDevices: MediaDeviceInfo[] = [];
+
   constructor(
     private jscanifyService: JscanifyService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // Initialize camera feed
-    navigator.mediaDevices.getUserMedia({ video: {facingMode: 'environment'}}).then((stream) => {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    navigator.mediaDevices.getUserMedia(this.getConstraints(devices)).then((stream) => {
       const videoElement = this.cameraVideo.nativeElement;
       videoElement.srcObject = stream;
       videoElement.onloadedmetadata = () => {
@@ -31,6 +34,23 @@ export class FrameAdjustComponent implements OnInit {
     }).catch((error) => {
       console.error('Error accessing camera:', error);
     });
+  }
+
+  getConstraints(userMedia: MediaDeviceInfo[]) {
+    const videoDevices = userMedia.filter(mediaDevice => mediaDevice.kind === 'videoinput');
+    this.allDevices = videoDevices;
+
+    return {
+      audio: false,
+      video: {
+        width: {ideal: 1920},
+        height: {ideal: 1080},
+        frameRate: {exact: 30},
+        deviceId: {
+          exact: videoDevices[videoDevices.length - 1].deviceId
+        }
+      }
+    };
   }
 
   takeScreenshot() {
