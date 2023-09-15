@@ -7,12 +7,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class FrameAdjustComponent implements OnInit {
   @ViewChild('cameraVideo')
-  private cameraVideo: ElementRef;
+  private cameraVideo: ElementRef = {} as ElementRef
   @ViewChild('screenshotCanvas')
-  private screenshotCanvas: ElementRef;
+  private screenshotCanvas: ElementRef = {} as ElementRef
 
-  videoWidth: number;
-  videoHeight: number;
+  videoWidth: number = 0;
+  videoHeight: number = 0;
 
   constructor() {}
 
@@ -21,7 +21,7 @@ export class FrameAdjustComponent implements OnInit {
     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
       const videoElement = this.cameraVideo.nativeElement;
       videoElement.srcObject = stream;
-      videoElement.onloadedmetadata = (e) => {
+      videoElement.onloadedmetadata = () => {
         this.videoWidth = videoElement.videoWidth;
         this.videoHeight = videoElement.videoHeight;
       };
@@ -44,6 +44,7 @@ export class FrameAdjustComponent implements OnInit {
 
     // Define the region to capture within the alignment frame
     const alignmentFrame = document.querySelector('.alignment-frame');
+    // @ts-ignore
     const alignmentFrameRect = alignmentFrame.getBoundingClientRect();
 
     // Calculate the region to capture within the alignment frame
