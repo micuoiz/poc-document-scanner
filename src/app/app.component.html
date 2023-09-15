@@ -1,25 +1,40 @@
 <stzh-icon-sprite></stzh-icon-sprite>
 <stzh-flyingfocus></stzh-flyingfocus>
 
+<stzh-header>
+  <img
+    slot="logo"
+    src="media/logo/stzh-default.svg"
+    alt="Logo City Zürich, go to homepage"
+  />
+</stzh-header>
+
 <stzh-container>
-  <stzh-header>
-    <img
-      slot="logo"
-      src="media/logo/stzh-default.svg"
-      alt="Logo City Zürich, go to homepage"
-    />
-  </stzh-header>
+  <stzh-appnav>
+    <stzh-link [routerLink]="'canvas'" egovRouterLinkActive icon="search">
+      Canvas
+    </stzh-link>
+    <stzh-link [routerLink]="'native'" egovRouterLinkActive icon="bulleted-list">
+      Native
+    </stzh-link>
+    <stzh-link [routerLink]="'opencv'" egovRouterLinkActive icon="reset-time">
+      OpenCV
+    </stzh-link>
+    <stzh-link [routerLink]="'frame'" egovRouterLinkActive icon="focus">
+      Frame
+    </stzh-link>
+  </stzh-appnav>
   <stzh-cell span-medium="8">
+    <stzh-vspace></stzh-vspace>
     <stzh-pagetitle>
       <stzh-heading slot="heading" with-border>
         POC - Document Scanner
       </stzh-heading>
     </stzh-pagetitle>
-    <a [routerLink]="'canvas'">Canvas</a>
-    <stzh-vspace></stzh-vspace>
-    <a [routerLink]="'native'">Native</a>
-    <stzh-vspace></stzh-vspace>
     <router-outlet></router-outlet>
   </stzh-cell>
 </stzh-container>
+
+<stzh-vspace curve="big"></stzh-vspace>
+<stzh-footer></stzh-footer>
 

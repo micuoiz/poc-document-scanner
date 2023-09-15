@@ -1,9 +1,11 @@
+<stzh-heading level="2">Native</stzh-heading>
+
 <input #fileUpload
-       type="file"
-       capture="environment"
-       accept="image/*"
-       (click)="fileUpload.value"
-       (change)="processImage($event)"
+     type="file"
+     capture="environment"
+     accept="image/*"
+     (click)="fileUpload.value"
+     (change)="processImage($event)"
 >
 
 <img id="pictureTaken" />

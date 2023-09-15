@@ -1,0 +1,21 @@
+.camera-container {
+  position: relative;
+  width: 100%;
+}
+
+.alignment-frame {
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 50%; /* Adjust as needed to maintain proportionality */
+  height: 80%; /* 100% maintains the aspect ratio (1:1) */
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  pointer-events: none; /* Allow interactions with the camera beneath */
+}
+
+.screenshot-button {
+  position: absolute;
+  bottom: 10px; /* Adjust the distance from the bottom as needed */
+  left: 10px; /* Adjust the distance from the left as needed */
+}

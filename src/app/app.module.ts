@@ -5,12 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { NativeComponent } from './components/native/native.component';
+import { OpencvComponent } from './components/opencv/opencv.component';
+import { FrameAdjustComponent } from './components/frame-adjust/frame-adjust.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CanvasComponent,
-    NativeComponent
+    NativeComponent,
+    OpencvComponent,
+    FrameAdjustComponent
   ],
   imports: [
     BrowserModule,
