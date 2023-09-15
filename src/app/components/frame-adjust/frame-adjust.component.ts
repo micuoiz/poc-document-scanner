@@ -21,7 +21,7 @@ export class FrameAdjustComponent implements OnInit {
     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
       const videoElement = this.cameraVideo.nativeElement;
       videoElement.srcObject = stream;
-      videoElement.onloadedmetadata = () => {
+      videoElement.onloadedmetadata = (e) => {
         this.videoWidth = videoElement.videoWidth;
         this.videoHeight = videoElement.videoHeight;
       };
@@ -44,7 +44,6 @@ export class FrameAdjustComponent implements OnInit {
 
     // Define the region to capture within the alignment frame
     const alignmentFrame = document.querySelector('.alignment-frame');
-    // @ts-ignore
     const alignmentFrameRect = alignmentFrame.getBoundingClientRect();
 
     // Calculate the region to capture within the alignment frame
@@ -65,5 +64,16 @@ export class FrameAdjustComponent implements OnInit {
 
     // Draw the captured region onto the canvas
     ctx.putImageData(screenshot, 0, 0);
+
+    this.processImage(canvas);
+  }
+
+  processImage(canvas: any) {
+    const paperContour = this.jscanifyService.getPaperContour(canvas);
+    const resultCanvas = this.jscanifyService.extractPaper(canvas, this.jscanifyService.getCornerPoints(paperContour));
+    const extractedCtx = this.screenshotCanvas.nativeElement.getContext("2d");
+    this.screenshotCanvas.nativeElement.width = resultCanvas.width;
+    this.screenshotCanvas.nativeElement.height = resultCanvas.height;
+    extractedCtx.drawImage(resultCanvas, 0, 0);
   }
 }
