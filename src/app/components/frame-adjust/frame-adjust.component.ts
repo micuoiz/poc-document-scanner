@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { JscanifyService } from "../../common/jscanify.service";
 
 @Component({
   selector: 'app-frame-adjust',
@@ -7,21 +8,23 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class FrameAdjustComponent implements OnInit {
   @ViewChild('cameraVideo')
-  private cameraVideo: ElementRef = {} as ElementRef
+  private cameraVideo: ElementRef = {} as ElementRef;
   @ViewChild('screenshotCanvas')
-  private screenshotCanvas: ElementRef = {} as ElementRef
+  private screenshotCanvas: ElementRef = {} as ElementRef;
 
   videoWidth: number = 0;
   videoHeight: number = 0;
 
-  constructor() {}
+  constructor(
+    private jscanifyService: JscanifyService
+  ) {}
 
   ngOnInit(): void {
     // Initialize camera feed
     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
       const videoElement = this.cameraVideo.nativeElement;
       videoElement.srcObject = stream;
-      videoElement.onloadedmetadata = (e) => {
+      videoElement.onloadedmetadata = () => {
         this.videoWidth = videoElement.videoWidth;
         this.videoHeight = videoElement.videoHeight;
       };
@@ -44,6 +47,7 @@ export class FrameAdjustComponent implements OnInit {
 
     // Define the region to capture within the alignment frame
     const alignmentFrame = document.querySelector('.alignment-frame');
+    // @ts-ignore
     const alignmentFrameRect = alignmentFrame.getBoundingClientRect();
 
     // Calculate the region to capture within the alignment frame
