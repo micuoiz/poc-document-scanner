@@ -1,8 +1,7 @@
 <div class="camera-container">
   <video #cameraVideo autoplay="autoplay"></video>
-  <div class="alignment-frame"></div>
   <button (click)="takeScreenshot()" class="screenshot-button">Take Screenshot</button>
+  <div #alignmentFrame class="alignment-frame"></div>
 </div>
-
 
 <canvas #screenshotCanvas></canvas>

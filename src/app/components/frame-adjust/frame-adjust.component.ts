@@ -11,6 +11,8 @@ export class FrameAdjustComponent implements OnInit {
   private cameraVideo: ElementRef = {} as ElementRef;
   @ViewChild('screenshotCanvas')
   private screenshotCanvas: ElementRef = {} as ElementRef;
+  @ViewChild('alignmentFrame')
+  private alignmentFrame: ElementRef = {} as ElementRef;
 
   videoWidth: number = 0;
   videoHeight: number = 0;
@@ -30,10 +32,22 @@ export class FrameAdjustComponent implements OnInit {
       videoElement.onloadedmetadata = () => {
         this.videoWidth = videoElement.videoWidth;
         this.videoHeight = videoElement.videoHeight;
+
+    this.setAlignmentFrameDimensions();
       };
     }).catch((error) => {
       console.error('Error accessing camera:', error);
     });
+  }
+
+  setAlignmentFrameDimensions() {
+    if (this.videoWidth !== null && this.videoHeight !== null) {
+      const alignmentFrame = this.alignmentFrame.nativeElement;
+      const frameWidth = this.videoWidth * 0.40; // Adjust the width as needed
+      const frameHeight = this.videoHeight * 0.7; // Adjust the height as needed
+      alignmentFrame.style.width = frameWidth + 'px';
+      alignmentFrame.style.height = frameHeight + 'px';
+    }
   }
 
   getConstraints(userMedia: MediaDeviceInfo[]) {
@@ -43,8 +57,6 @@ export class FrameAdjustComponent implements OnInit {
     return {
       audio: false,
       video: {
-        width: {ideal: 1920},
-        height: {ideal: 1080},
         frameRate: {exact: 30},
         deviceId: {
           exact: videoDevices[videoDevices.length - 1].deviceId
@@ -71,10 +83,10 @@ export class FrameAdjustComponent implements OnInit {
     const alignmentFrameRect = alignmentFrame.getBoundingClientRect();
 
     // Calculate the region to capture within the alignment frame
-    const x = alignmentFrameRect.left - videoElement.getBoundingClientRect().left;
-    const y = alignmentFrameRect.top - videoElement.getBoundingClientRect().top;
-    const width = alignmentFrameRect.width;
-    const height = alignmentFrameRect.height;
+    const x = (alignmentFrameRect.left - videoElement.getBoundingClientRect().left) / videoElement.offsetWidth * this.videoWidth;
+    const y = (alignmentFrameRect.top - videoElement.getBoundingClientRect().top) / videoElement.offsetHeight * this.videoHeight;
+    const width = (alignmentFrameRect.width / videoElement.offsetWidth) * this.videoWidth;
+    const height = (alignmentFrameRect.height / videoElement.offsetHeight) * this.videoHeight;
 
     // Capture the screenshot within the alignment frame
     const screenshot = ctx.getImageData(x, y, width, height);
