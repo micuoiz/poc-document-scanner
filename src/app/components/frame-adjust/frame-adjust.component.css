@@ -1,15 +1,22 @@
 .camera-container {
   position: relative;
   width: 100%;
+  max-width: 100%;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+}
+
+video {
   max-width: 100%;
+  height: auto;
 }
 
 .alignment-frame {
-  width: 35%;
-  height: 50%;
+  width: var(--frame-width, 40%);
+  height: var(--frame-height, 70%);
   border: 2px dashed rgba(255, 255, 255, 0.5);
   pointer-events: none;
   position: absolute;
@@ -19,4 +26,20 @@
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.screenshot-canvas-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#screenshotCanvas {
+  max-width: 100%;
+  max-height: 100%;
 }

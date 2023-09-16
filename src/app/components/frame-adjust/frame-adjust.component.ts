@@ -33,20 +33,21 @@ export class FrameAdjustComponent implements OnInit {
         this.videoWidth = videoElement.videoWidth;
         this.videoHeight = videoElement.videoHeight;
 
-    this.setAlignmentFrameDimensions();
+    this.setAlignmentFrameDimensions(videoElement);
       };
     }).catch((error) => {
       console.error('Error accessing camera:', error);
     });
   }
 
-  setAlignmentFrameDimensions() {
+  setAlignmentFrameDimensions(videoElement: any) {
     if (this.videoWidth !== null && this.videoHeight !== null) {
       const alignmentFrame = this.alignmentFrame.nativeElement;
-      const frameWidth = this.videoWidth * 0.40; // Adjust the width as needed
-      const frameHeight = this.videoHeight * 0.7; // Adjust the height as needed
-      alignmentFrame.style.width = frameWidth + 'px';
-      alignmentFrame.style.height = frameHeight + 'px';
+      const frameWidth = videoElement.clientWidth * 0.4;
+      const frameHeight = videoElement.clientHeight * 0.7;
+
+      alignmentFrame.style.setProperty('--frame-width', frameWidth + 'px');
+      alignmentFrame.style.setProperty('--frame-height', frameHeight + 'px');
     }
   }
 
