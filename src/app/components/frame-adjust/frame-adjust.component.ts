@@ -43,8 +43,8 @@ export class FrameAdjustComponent implements OnInit {
   setAlignmentFrameDimensions(videoElement: any) {
     if (this.videoWidth !== null && this.videoHeight !== null) {
       const alignmentFrame = this.alignmentFrame.nativeElement;
-      const frameWidth = videoElement.clientWidth * 0.4;
-      const frameHeight = videoElement.clientHeight * 0.7;
+      const frameWidth = videoElement.clientWidth * 0.5;
+      const frameHeight = videoElement.clientHeight * 0.8;
 
       alignmentFrame.style.setProperty('--frame-width', frameWidth + 'px');
       alignmentFrame.style.setProperty('--frame-height', frameHeight + 'px');
