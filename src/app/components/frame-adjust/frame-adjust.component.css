@@ -15,8 +15,8 @@ video {
 }
 
 .alignment-frame {
-  width: var(--frame-width, 50%);
-  height: var(--frame-height, 80%);
+  width: var(--frame-width, 60%);
+  height: var(--frame-height, 90%);
   border: 2px dashed rgba(255, 255, 255, 0.5);
   pointer-events: none;
   position: absolute;
