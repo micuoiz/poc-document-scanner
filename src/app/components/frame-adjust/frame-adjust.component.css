@@ -28,18 +28,7 @@ video {
   left: 0;
 }
 
-.screenshot-canvas-container {
-  position: relative;
-  width: 100%;
+canvas {
   max-width: 100%;
   height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-#screenshotCanvas {
-  max-width: 100%;
-  max-height: 100%;
 }
