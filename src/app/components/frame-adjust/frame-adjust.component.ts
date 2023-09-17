@@ -34,7 +34,11 @@ export class FrameAdjustComponent implements OnInit {
         this.videoWidth = videoElement.videoWidth;
         this.videoHeight = videoElement.videoHeight;
 
-    this.setAlignmentFrameDimensions(videoElement);
+        const takeScreenshotButton = document.getElementById('screenshot-button');
+        // @ts-ignore
+        takeScreenshotButton.style.display = 'block';
+
+        this.setAlignmentFrameDimensions(videoElement);
       };
     }).catch((error) => {
       console.error('Error accessing camera:', error);
