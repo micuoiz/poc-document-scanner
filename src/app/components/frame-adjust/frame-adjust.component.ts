@@ -23,8 +23,9 @@ export class FrameAdjustComponent implements OnInit {
     private jscanifyService: JscanifyService
   ) {}
 
-  async ngOnInit() {
-    // Initialize camera feed
+  ngOnInit(): void {}
+
+  async openCamera() {
     const devices = await navigator.mediaDevices.enumerateDevices();
     navigator.mediaDevices.getUserMedia(this.getConstraints(devices)).then((stream) => {
       const videoElement = this.cameraVideo.nativeElement;

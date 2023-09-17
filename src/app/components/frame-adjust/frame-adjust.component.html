@@ -1,6 +1,9 @@
+<stzh-button icon='camera' (click)="openCamera()" class="open-camera-button">Open Camera</stzh-button>
+<stzh-vspace></stzh-vspace>
+
 <div class="camera-container">
   <video #cameraVideo autoplay="autoplay"></video>
-  <button (click)="takeScreenshot()" class="screenshot-button">Take Screenshot</button>
+  <stzh-button (click)="takeScreenshot()" id="screenshot-button" class="screenshot-button">Take Screenshot</stzh-button>
   <div #alignmentFrame class="alignment-frame"></div>
 </div>
 
