@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { JscanifyService } from "../../common/jscanify.service";
+import {Dimensions, ImageCroppedEvent} from "ngx-image-cropper";
 
 @Component({
   selector: 'app-frame-adjust',
@@ -9,6 +10,8 @@ import { JscanifyService } from "../../common/jscanify.service";
 export class FrameAdjustComponent implements OnInit {
   @ViewChild('cameraVideo')
   private cameraVideo: ElementRef = {} as ElementRef;
+  @ViewChild('tempCanvas')
+  private tempCanvas: ElementRef = {} as ElementRef;
   @ViewChild('screenshotCanvas')
   private screenshotCanvas: ElementRef = {} as ElementRef;
   @ViewChild('alignmentFrame')
@@ -19,11 +22,29 @@ export class FrameAdjustComponent implements OnInit {
 
   allDevices: MediaDeviceInfo[] = [];
 
+  tempData: string | undefined = '';
+  screenshotData: string | undefined = '';
+  screenshotTaken: boolean = false;
+
   constructor(
     private jscanifyService: JscanifyService
   ) {}
 
   ngOnInit(): void {}
+
+  imageLoaded() {
+    this.screenshotTaken = true;
+    console.log('Image loaded');
+  }
+
+  cropperReady(sourceImageDimensions: Dimensions) {
+    console.log('Cropper ready', sourceImageDimensions);
+  }
+
+  loadImageFailed() {
+    console.log('Load failed');
+  }
+
 
   async openCamera() {
     const devices = await navigator.mediaDevices.enumerateDevices();
@@ -71,7 +92,12 @@ export class FrameAdjustComponent implements OnInit {
     };
   }
 
-  takeScreenshot() {
+  initCropper(): void {
+    this.screenshotData = this.extractFrame().toDataURL();
+    this.screenshotTaken = true;
+  }
+
+  extractFrame() {
     // Capture a screenshot within the alignment frame
     const videoElement = this.cameraVideo.nativeElement;
     const canvas = this.screenshotCanvas.nativeElement;
@@ -106,8 +132,7 @@ export class FrameAdjustComponent implements OnInit {
 
     // Draw the captured region onto the canvas
     ctx.putImageData(screenshot, 0, 0);
-
-    this.processImage(canvas);
+    return canvas;
   }
 
   processImage(canvas: any) {
@@ -117,5 +142,30 @@ export class FrameAdjustComponent implements OnInit {
     this.screenshotCanvas.nativeElement.width = resultCanvas.width;
     this.screenshotCanvas.nativeElement.height = resultCanvas.height;
     extractedCtx.drawImage(resultCanvas, 0, 0);
+    this.screenshotCanvas.nativeElement.style.removeProperty('display');
+  }
+
+  imageCropped(event: ImageCroppedEvent): void {
+    // @ts-ignore
+    this.tempData = event.base64;
+  }
+
+  confirmCrop(): void {
+    const canvas = this.tempCanvas.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    const image = new Image();
+    // @ts-ignore
+    image.src = this.tempData;
+
+    image.onload = () => {
+      // Set canvas dimensions to match the image dimensions
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      // Draw the base64 image onto the canvas
+      ctx.drawImage(image, 0, 0);
+    };
+    this.processImage(canvas);
   }
 }
