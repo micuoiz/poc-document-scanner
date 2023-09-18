@@ -71,8 +71,8 @@ export class CanvasComponent implements AfterViewInit {
           this.canvas.nativeElement.height = this.video.nativeElement.videoHeight;
           canvasCtx.drawImage(this.video.nativeElement, 0, 0);
           const resultCanvas = this.jscanifyService.highlightPaper(this.canvas.nativeElement, {
-            color: 'blue',
-            thickness: 3
+            color: 'green',
+            thickness: 4
           });
           this.result.nativeElement.width = this.canvas.nativeElement.width;
           this.result.nativeElement.height = this.canvas.nativeElement.height;
