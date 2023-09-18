@@ -161,8 +161,9 @@ export class FrameAdjustComponent implements OnInit {
     image.onload = () => {
       canvas.width = image.width;
       canvas.height = image.height;
+
       ctx.drawImage(image, 0, 0);
-      this.processImage(canvas);
     };
+    this.processImage(canvas);
   }
 }
