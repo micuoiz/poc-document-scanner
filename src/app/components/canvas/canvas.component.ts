@@ -94,9 +94,7 @@ export class CanvasComponent implements AfterViewInit {
         width: {ideal: 1920},
         height: {ideal: 1080},
         frameRate: {exact: 30},
-        deviceId: {
-          exact: videoDevices[videoDevices.length - 1].deviceId
-        }
+        facingMode: 'environment'
       }
     };
   }

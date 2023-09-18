@@ -41,6 +41,11 @@
   <stzh-button icon="camera" (click)="extract()">
     Datei hochladen
   </stzh-button>
+  <ng-container *ngFor="let device of allDevices; index as x">
+    <h1>Kamera: {{ x }}</h1>
+    <p>{{ device.label }}</p>
+    <p>{{ device.deviceId }}</p>
+  </ng-container>
 </ng-container>
 <br />
 <canvas #extracted id="extracted"></canvas> <!-- extracted photo -->
